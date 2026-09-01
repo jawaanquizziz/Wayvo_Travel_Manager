@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, MapPin, Users, Calendar, Eye, Bot, AlertTriangle, Zap, Check } from 'lucide-react';
+import {
+  Menu, Bot, AlertTriangle, Zap, Check, Plane, Clock, Hotel,
+  Utensils, Camera, Users, Bell, ArrowRight, ShieldCheck, CheckCircle2
+} from 'lucide-react';
 import Sidebar from '../../components/Sidebar';
 import StatusBadge from '../../components/StatusBadge';
 import AIChat from '../../components/AIChat';
@@ -9,6 +12,7 @@ import { operatorTours } from '../../data/mockData';
 const OperatorOperations: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [applyingFix, setApplyingFix] = useState<string | null>(null);
   const [fixApplied, setFixApplied] = useState<string | null>(null);
@@ -17,224 +21,253 @@ const OperatorOperations: React.FC = () => {
 
   const handleApplyFix = async (tourId: string) => {
     setApplyingFix(tourId);
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1800));
     setFixApplied(tourId);
     setApplyingFix(null);
   };
 
   const handleFlightFix = async () => {
     setFlightFixLoading(true);
-    await new Promise(r => setTimeout(r, 2500));
+    await new Promise(r => setTimeout(r, 2200));
     setFlightFixApplied(true);
     setFlightFixLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
 
-      <div className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        {/* Header */}
-        <header className="bg-white border-b border-gray-100 sticky top-0 z-20 px-6 py-4 flex items-center gap-4">
-          <div>
-            <h1 className="text-xl font-black text-gray-900">Operations Control Center</h1>
-            <p className="text-gray-400 text-sm">Real-time tour management & conflict resolution</p>
+      <div className={`flex-1 transition-all duration-300 min-w-0 ${
+        sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+      }`}>
+        {/* Top Navbar */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-20 px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 md:hidden"
+              aria-label="Open Sidebar"
+            >
+              <Menu size={22} />
+            </button>
+            <div>
+              <h1 className="text-lg sm:text-xl font-black text-gray-900 leading-tight">Operations Control Center</h1>
+              <p className="text-gray-400 text-xs hidden sm:block">Live conflict detection & automated tour adaptation</p>
+            </div>
           </div>
-          <div className="ml-auto flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
+          
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-red-50 border border-red-200 px-3 py-1.5 rounded-xl">
               <div className="w-2 h-2 bg-brand-red rounded-full animate-pulse"></div>
-              <span className="text-brand-red font-bold text-sm">Live Monitoring</span>
+              <span className="text-brand-red font-bold text-xs">Live Telemetry Active</span>
             </div>
           </div>
         </header>
 
-        <main className="p-6 max-w-7xl">
-          {/* Flight Delay Scenario — MAJOR DEMO FEATURE */}
-          <div className={`mb-6 rounded-2xl border-2 overflow-hidden transition-all ${
-            flightFixApplied ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+        <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+          {/* Flight Delay Live Simulation Banner */}
+          <div className={`mb-6 rounded-3xl border-2 overflow-hidden transition-all shadow-card ${
+            flightFixApplied ? 'border-emerald-200 bg-emerald-50/70' : 'border-red-200 bg-red-50/60'
           }`}>
-            <div className="px-6 py-4 flex items-center gap-3 border-b border-current border-opacity-20">
-              {flightFixApplied ? (
-                <>
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+            <div className="px-5 sm:px-7 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-current border-opacity-10">
+              <div className="flex items-center gap-3">
+                {flightFixApplied ? (
+                  <div className="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center shadow-xs flex-shrink-0">
                     <Check size={18} className="text-white" />
                   </div>
-                  <div>
-                    <p className="font-bold text-green-800">✅ Issue Resolved — WV204 Kashmir Escape</p>
-                    <p className="text-green-600 text-sm">WAYVO automatically rescheduled all affected activities</p>
+                ) : (
+                  <div className="w-9 h-9 bg-brand-red rounded-xl flex items-center justify-center shadow-xs flex-shrink-0 animate-pulse">
+                    <AlertTriangle size={18} className="text-white" />
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center animate-pulse">
-                    <AlertTriangle size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-red-900">⚠️ ALERT: Flight Delayed — WV204 Kashmir Escape</p>
-                    <p className="text-red-600 text-sm">IndiGo 6E204 delayed by 2 hours — Oct 12, Srinagar route</p>
-                  </div>
-                  <div className="ml-auto bg-red-600 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse">
-                    URGENT
-                  </div>
-                </>
+                )}
+                <div>
+                  <p className={`font-black text-sm sm:text-base ${flightFixApplied ? 'text-emerald-900' : 'text-red-950'}`}>
+                    {flightFixApplied ? 'Disruption Resolved — Kashmir Group WV204' : 'LIVE ALERT: Flight Delay Detected — WV204 Kashmir Escape'}
+                  </p>
+                  <p className={`text-xs ${flightFixApplied ? 'text-emerald-700' : 'text-red-700'}`}>
+                    {flightFixApplied ? 'WAYVO AI rescheduled ground transfers, updated hotel, and alerted travelers' : 'IndiGo 6E204 delayed by 2 hours on Srinagar route (Oct 12)'}
+                  </p>
+                </div>
+              </div>
+
+              {!flightFixApplied && (
+                <div className="inline-flex items-center gap-1.5 self-start sm:self-auto bg-brand-red text-white text-[10px] sm:text-xs px-3 py-1 rounded-full font-black uppercase tracking-wider shadow-xs">
+                  <Zap size={11} /> Immediate Action
+                </div>
               )}
             </div>
 
-            {!flightFixApplied && (
-              <div className="px-6 py-5">
-                <div className="grid md:grid-cols-2 gap-6">
+            {!flightFixApplied ? (
+              <div className="p-5 sm:p-7">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Impact Analysis */}
                   <div>
-                    <p className="text-sm font-bold text-red-800 mb-3">🔍 WAYVO Impact Analysis</p>
+                    <p className="text-xs font-black text-red-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <Clock size={14} className="text-brand-red" />
+                      WAYVO Conflict Impact Matrix:
+                    </p>
                     <div className="space-y-2">
                       {[
-                        { item: 'Airport Transfer', impact: 'Move by +2 hours → 11:30 AM', severity: 'high' },
-                        { item: 'Hotel Check-in', impact: 'Adjust to 15:00 (was 13:00)', severity: 'medium' },
-                        { item: 'Dal Lake Activity', impact: 'Move to next day (no availability)', severity: 'high' },
-                        { item: 'Dinner Reservation', impact: 'Shift to 20:30 (available)', severity: 'low' },
-                      ].map(impact => (
-                        <div key={impact.item} className="flex items-start gap-3 bg-white/70 rounded-xl p-3">
-                          <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${
-                            impact.severity === 'high' ? 'bg-red-500' :
-                            impact.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                          }`}></div>
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">{impact.item}</p>
-                            <p className="text-xs text-gray-500">{impact.impact}</p>
+                        { item: 'Airport Driver Transfer', impact: 'Pushed +2h (Now 13:00 IST)', severity: 'high', icon: Plane },
+                        { item: 'Hotel Check-in', impact: 'Adjusted to 15:00 at Lalit Palace', severity: 'medium', icon: Hotel },
+                        { item: 'Dal Lake Shikara Tour', impact: 'Moved to Day 2 afternoon', severity: 'high', icon: Camera },
+                        { item: 'Ahdoos Dinner Reservation', impact: 'Shifted to 20:30 (Confirmed)', severity: 'low', icon: Utensils },
+                      ].map(impact => {
+                        const IIcon = impact.icon;
+                        return (
+                          <div key={impact.item} className="flex items-center gap-3 bg-white rounded-2xl p-3 border border-red-100 shadow-xs">
+                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                              impact.severity === 'high' ? 'bg-red-50 text-brand-red' :
+                              impact.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'
+                            }`}>
+                              <IIcon size={15} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-gray-900 truncate">{impact.item}</p>
+                              <p className="text-[11px] text-gray-500 truncate">{impact.impact}</p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 
-                  {/* AI Recommendation */}
+                  {/* AI Recommendation Actions */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-6 h-6 bg-brand-red rounded-full flex items-center justify-center">
-                        <Zap size={12} className="text-white" />
+                      <div className="w-5 h-5 bg-brand-red rounded-lg flex items-center justify-center">
+                        <Zap size={11} className="text-white" />
                       </div>
-                      <p className="text-sm font-bold text-gray-800">WAYVO AI Recommendation</p>
+                      <p className="text-xs font-black text-gray-900 uppercase tracking-wider">WAYVO Automated Action Plan:</p>
                     </div>
-                    <div className="bg-white/70 rounded-2xl p-4 space-y-3">
+
+                    <div className="bg-white rounded-2xl p-4 space-y-2.5 border border-gray-200/80 shadow-xs text-xs text-gray-700">
                       {[
-                        '✅ Move airport transfer to 11:30 AM',
-                        '✅ Update hotel to 15:00 check-in',
-                        '✅ Reschedule Shikara ride to Day 2',
-                        '✅ Move dinner to 20:30',
-                        '✅ Notify 4 travelers via app',
-                        '✅ Update Coordinator Rahul Singh',
+                        '✓ Push driver pickup to 13:00 automatically',
+                        '✓ Update hotel reception for late arrival check-in',
+                        '✓ Reschedule Shikara ticket without cancellation penalty',
+                        '✓ Send synchronized push notification to all 4 travelers',
+                        '✓ Notify local ground coordinator Rahul Singh',
                       ].map(action => (
-                        <div key={action} className="text-sm text-gray-700 flex items-center gap-2">
-                          <span className="text-xs">{action}</span>
+                        <div key={action} className="flex items-center gap-2 font-medium">
+                          <span>{action}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 flex gap-3">
+
+                    <div className="mt-4 flex flex-col sm:flex-row gap-2.5">
                       <button
                         onClick={handleFlightFix}
                         disabled={flightFixLoading}
-                        className="flex-1 bg-brand-red text-white py-3 rounded-xl font-bold text-sm hover:bg-red-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-80"
+                        className="flex-1 bg-brand-red text-white py-3 px-5 rounded-2xl font-bold text-xs sm:text-sm hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-red disabled:opacity-80"
                       >
                         {flightFixLoading ? (
-                          <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin"></div> Applying...</>
+                          <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Syncing Ground Operations...</>
                         ) : (
-                          <><Zap size={14} /> Apply All Changes</>
+                          <><Zap size={15} /> Apply All Changes Instantly</>
                         )}
                       </button>
-                      <button className="px-4 bg-white border border-gray-200 text-gray-600 py-3 rounded-xl font-semibold text-sm hover:bg-gray-50">
-                        Customize
+                      <button
+                        onClick={() => navigate('/operator/tours')}
+                        className="px-4 bg-white border border-gray-200 text-gray-700 py-3 rounded-2xl font-bold text-xs hover:bg-gray-50 text-center"
+                      >
+                        Review Tour
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-
-            {flightFixApplied && (
-              <div className="px-6 py-4 grid grid-cols-3 gap-4">
+            ) : (
+              <div className="p-5 sm:p-7 grid grid-cols-3 gap-3 text-center">
                 {[
-                  { label: 'Activities Updated', val: '4' },
-                  { label: 'Vendors Notified', val: '3' },
-                  { label: 'Travelers Alerted', val: '4' },
-                ].map(s => (
-                  <div key={s.label} className="text-center">
-                    <p className="text-2xl font-black text-green-700">{s.val}</p>
-                    <p className="text-xs text-green-600">{s.label}</p>
-                  </div>
-                ))}
+                  { label: 'Activities Rescheduled', val: '4', icon: CheckCircle2 },
+                  { label: 'Vendors Re-coordinated', val: '3', icon: Hotel },
+                  { label: 'Travelers Updated', val: '4', icon: Users },
+                ].map(s => {
+                  const SIcon = s.icon;
+                  return (
+                    <div key={s.label} className="bg-white rounded-2xl p-3.5 border border-emerald-200">
+                      <div className="inline-flex items-center justify-center w-7 h-7 bg-emerald-50 text-emerald-600 rounded-xl mb-1">
+                        <SIcon size={15} />
+                      </div>
+                      <p className="text-xl sm:text-2xl font-black text-emerald-800">{s.val}</p>
+                      <p className="text-[11px] text-emerald-700 font-medium">{s.label}</p>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
 
-          {/* All Tours */}
-          <div className="card rounded-2xl">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="font-black text-gray-900 text-lg">All Active Tours</h2>
-              <button onClick={() => navigate('/operator/tours')} className="text-brand-red text-sm font-bold">
-                Manage Tours →
+          {/* Active Tours Fleet Status */}
+          <div className="card rounded-3xl p-5 sm:p-7 border border-gray-100 shadow-card">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+              <div>
+                <h2 className="font-black text-gray-900 text-base sm:text-lg">Live Tour Fleet Overview</h2>
+                <p className="text-gray-400 text-xs">Active group journeys and real-time risk indicators</p>
+              </div>
+              <button onClick={() => navigate('/operator/tours')} className="text-brand-red text-xs sm:text-sm font-bold hover:underline self-start sm:self-auto">
+                Manage Fleet Database →
               </button>
             </div>
+
             <div className="space-y-3">
               {operatorTours.map(tour => (
-                <div key={tour.id} className={`flex items-center gap-4 p-4 rounded-2xl border transition-all hover:shadow-sm ${
-                  tour.status === 'at-risk' ? 'border-red-200 bg-red-50/50' : 'border-gray-100 bg-gray-50 hover:bg-white'
-                }`}>
-                  <img
-                    src={tour.image}
-                    alt={tour.destination}
-                    className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
-                    onError={(e) => { (e.target as HTMLImageElement).style.background = '#e2e8f0'; (e.target as HTMLImageElement).style.display = 'none'; }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-gray-900">{tour.title}</span>
-                      <span className="text-gray-400 text-xs font-mono">{tour.id}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
-                      <span className="flex items-center gap-1"><Calendar size={10} /> {tour.startDate} – {tour.endDate}</span>
-                      <span className="flex items-center gap-1"><Users size={10} /> {tour.travelers}</span>
-                      <span>Coord: {tour.coordinator}</span>
-                    </div>
-                    {tour.alert && (
-                      <p className="text-xs text-red-600 font-medium mt-1">⚠️ {tour.alert}</p>
-                    )}
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="hidden md:block w-28">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
-                      <span>Progress</span>
-                      <span>{tour.progress}%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-200 rounded-full">
-                      <div
-                        className={`h-1.5 rounded-full ${tour.status === 'at-risk' ? 'bg-brand-red' : 'bg-green-500'}`}
-                        style={{ width: `${tour.progress}%` }}
-                      ></div>
+                <div
+                  key={tour.id}
+                  className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border transition-all ${
+                    tour.status === 'at-risk' ? 'border-red-200 bg-red-50/40' : 'border-gray-100 bg-white hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <img
+                      src={tour.image}
+                      alt={tour.destination}
+                      className="w-12 h-12 rounded-2xl object-cover flex-shrink-0"
+                      onError={(e) => { (e.target as HTMLImageElement).style.background = '#e2e8f0'; (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold text-gray-900 text-sm">{tour.title}</span>
+                        <span className="text-gray-400 text-xs font-mono bg-gray-100 px-2 py-0.5 rounded-md">{tour.id}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-2 flex-wrap">
+                        <span>{tour.destination}</span>
+                        <span>•</span>
+                        <span>{tour.startDate} – {tour.endDate}</span>
+                        <span>•</span>
+                        <span className="font-semibold text-gray-700">{tour.travelers} pax</span>
+                      </p>
+                      {tour.alert && (
+                        <p className="text-xs text-red-600 font-bold mt-1">⚠️ {tour.alert}</p>
+                      )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                     <StatusBadge status={tour.status} size="sm" />
-                    <div>
-                      <div className="text-sm font-bold text-gray-900">₹{(tour.value / 1000).toFixed(0)}K</div>
+                    
+                    <div className="text-right">
+                      <span className="text-xs font-black text-gray-900 block">₹{(tour.value / 1000).toFixed(0)}K</span>
+                      <span className="text-[10px] text-gray-400">Total Value</span>
                     </div>
-                    {tour.status === 'at-risk' && (fixApplied !== tour.id) && (
+
+                    {tour.status === 'at-risk' && fixApplied !== tour.id && (
                       <button
                         onClick={() => handleApplyFix(tour.id)}
                         disabled={applyingFix === tour.id}
-                        className="bg-brand-red text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 transition-colors flex items-center gap-1"
+                        className="bg-brand-red text-white px-3.5 py-1.5 rounded-xl text-xs font-bold hover:bg-red-700 transition-colors flex items-center gap-1 shadow-xs disabled:opacity-75"
                       >
                         {applyingFix === tour.id ? (
-                          <div className="w-3 h-3 border border-white/50 border-t-white rounded-full animate-spin" />
+                          <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
                         ) : <Zap size={12} />}
                         Fix
                       </button>
-                    )}
-                    {fixApplied === tour.id && (
-                      <span className="text-green-600 text-xs font-bold flex items-center gap-1">
-                        <Check size={12} /> Fixed
-                      </span>
                     )}
                   </div>
                 </div>
@@ -245,11 +278,16 @@ const OperatorOperations: React.FC = () => {
       </div>
 
       {!showAI && (
-        <button onClick={() => setShowAI(true)} className="fixed bottom-6 right-6 bg-brand-red text-white px-5 py-3.5 rounded-full shadow-red-lg font-bold text-sm flex items-center gap-2 hover:bg-red-700 transition-all hover:scale-105 z-40">
-          <Bot size={18} />WAYVO AI
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        <button
+          onClick={() => setShowAI(true)}
+          className="fixed bottom-6 right-6 bg-brand-red text-white px-5 py-3.5 rounded-full shadow-red-lg font-bold text-sm flex items-center gap-2 hover:bg-red-700 transition-all hover:scale-105 z-40"
+        >
+          <Bot size={18} />
+          <span>WAYVO AI</span>
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         </button>
       )}
+
       {showAI && <AIChat onClose={() => setShowAI(false)} variant="operator" />}
     </div>
   );

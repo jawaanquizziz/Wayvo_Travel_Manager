@@ -1,96 +1,132 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-  Bell, Search, MapPin, Calendar, Users, TrendingUp,
-  AlertTriangle, CheckCircle, Clock, Zap, BarChart2, Bot
+  Bell, Search, MapPin, Users, TrendingUp,
+  AlertTriangle, CheckCircle2, Clock, Zap, Bot,
+  Menu, ShieldCheck, Car, Hotel, Camera, Utensils,
+  ArrowRight, Calendar
 } from 'lucide-react';
 import Sidebar from '../../components/Sidebar';
 import MetricCard from '../../components/MetricCard';
 import StatusBadge from '../../components/StatusBadge';
 import AIChat from '../../components/AIChat';
-import { operatorTours, analyticsData, notifications } from '../../data/mockData';
+import NotificationPanel from '../../components/NotificationPanel';
+import { operatorTours } from '../../data/mockData';
 
 const OperatorDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
 
   const atRiskTours = operatorTours.filter(t => t.status === 'at-risk');
   const todayOps = [
-    { time: '09:30', action: 'Airport Pickup', location: 'Srinagar Airport', travelers: 4, tour: 'WV204', type: 'transport' },
-    { time: '11:00', action: 'Hotel Check-in', location: 'Pahalgam Hill Resort', travelers: 8, tour: 'WV202', type: 'hotel' },
-    { time: '14:00', action: 'Gondola Activity', location: 'Gulmarg Cable Car', travelers: 4, tour: 'WV204', type: 'activity' },
-    { time: '16:30', action: 'Backwaters Houseboat', location: 'Alleppey, Kerala', travelers: 2, tour: 'WV203', type: 'activity' },
-    { time: '19:00', action: 'Group Dinner', location: 'Rajput Heritage Haveli', travelers: 12, tour: 'WV202', type: 'food' },
+    { time: '09:30', action: 'Airport Pickup', location: 'Srinagar Airport', travelers: 4, tour: 'WV204', icon: Car },
+    { time: '11:00', action: 'Hotel Check-in', location: 'Pahalgam Hill Resort', travelers: 8, tour: 'WV202', icon: Hotel },
+    { time: '14:00', action: 'Gondola Activity', location: 'Gulmarg Cable Car', travelers: 4, tour: 'WV204', icon: Camera },
+    { time: '16:30', action: 'Houseboat Check-in', location: 'Alleppey, Kerala', travelers: 2, tour: 'WV203', icon: Hotel },
+    { time: '19:00', action: 'Group Dinner', location: 'Rajput Heritage Haveli', travelers: 12, tour: 'WV202', icon: Utensils },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+      {/* Responsive Sidebar */}
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
       
-      <div className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        {/* Top Header */}
-        <header className="bg-white border-b border-gray-100 sticky top-0 z-20 px-6 py-4 flex items-center gap-4">
-          <div className="flex-1 max-w-md relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search tours, travelers, vendors..."
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/30"
-            />
+      {/* Main Content Area */}
+      <div className={`flex-1 transition-all duration-300 min-w-0 ${
+        sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+      }`}>
+        {/* Top Navbar */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-20 px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            {/* Mobile Hamburger Menu Toggle */}
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 md:hidden"
+              aria-label="Open Sidebar"
+            >
+              <Menu size={22} />
+            </button>
+
+            <div className="relative hidden sm:block w-72 lg:w-96">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search tours, travelers, vendors..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/30 focus:border-brand-red"
+              />
+            </div>
           </div>
-          <div className="ml-auto flex items-center gap-3">
+
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setShowNotif(!showNotif)}
-              className="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
+              className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors text-gray-600"
             >
-              <Bell size={18} className="text-gray-600" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-red rounded-full"></span>
+              <Bell size={19} />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-brand-red rounded-full"></span>
             </button>
-            <div className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1.5">
-              <div className="w-7 h-7 bg-gray-700 rounded-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold">AX</span>
+
+            <div className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1.5 border border-gray-200">
+              <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                <span className="text-white text-[10px] font-black">AX</span>
               </div>
-              <span className="text-sm font-semibold text-gray-700">Alex</span>
+              <span className="text-xs font-bold text-gray-800 hidden sm:block">Alex F.</span>
             </div>
+
             <button
-              onClick={() => navigate('/')}
-              className="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 rounded-lg px-3 py-1.5"
+              onClick={() => navigate('/traveler')}
+              className="text-xs text-brand-red font-bold hover:bg-red-50 border border-red-200 rounded-xl px-3 py-1.5 transition-colors hidden sm:block"
             >
-              Switch to Traveler
+              Traveler Mode
             </button>
           </div>
         </header>
 
-        <main className="p-6 max-w-7xl">
-          {/* Greeting */}
+        <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+          {/* Greeting Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-black text-gray-900">Good morning, Alex 👋</h1>
-            <p className="text-gray-500 mt-1">Here's what's happening across your tours today.</p>
+            <div className="flex items-center gap-2 text-brand-red text-xs font-bold uppercase tracking-wider mb-1">
+              <ShieldCheck size={14} />
+              <span>Tour Operations Mission Control</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+              Good morning, Alex
+            </h1>
+            <p className="text-gray-500 text-xs sm:text-sm mt-0.5">Here is the real-time operational status across active group tours.</p>
           </div>
 
-          {/* Alert Banner */}
+          {/* Critical Risk Alert Banner */}
           {atRiskTours.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-center gap-4">
-              <div className="w-10 h-10 bg-brand-red rounded-xl flex items-center justify-center flex-shrink-0">
-                <AlertTriangle size={20} className="text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="font-bold text-red-900">{atRiskTours.length} tours require immediate attention</p>
-                <p className="text-red-600 text-sm">{atRiskTours.map(t => t.id).join(', ')} — action needed</p>
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-4 sm:p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-brand-red rounded-xl flex items-center justify-center flex-shrink-0 shadow-xs">
+                  <AlertTriangle size={20} className="text-white animate-pulse" />
+                </div>
+                <div>
+                  <p className="font-bold text-red-900 text-sm sm:text-base">{atRiskTours.length} tours require operational intervention</p>
+                  <p className="text-red-700 text-xs mt-0.5">{atRiskTours.map(t => `${t.id} (${t.title})`).join(' • ')} — Disruption detected</p>
+                </div>
               </div>
               <button
                 onClick={() => navigate('/operator/operations')}
-                className="bg-brand-red text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition-colors flex-shrink-0"
+                className="w-full sm:w-auto bg-brand-red text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
               >
-                Review Now
+                <Zap size={14} />
+                Resolve in Control Center
               </button>
             </div>
           )}
 
-          {/* Metrics */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <MetricCard
               title="Active Tours"
               value="24"
@@ -100,7 +136,7 @@ const OperatorDashboard: React.FC = () => {
               color="red"
             />
             <MetricCard
-              title="Travelers"
+              title="Total Travelers"
               value="186"
               subtitle="Currently on tour"
               icon={<Users size={20} className="text-blue-600" />}
@@ -108,56 +144,62 @@ const OperatorDashboard: React.FC = () => {
               color="blue"
             />
             <MetricCard
-              title="Revenue (Month)"
+              title="Monthly Revenue"
               value="₹18.6L"
               subtitle="Target: ₹20L"
-              icon={<TrendingUp size={20} className="text-green-600" />}
+              icon={<TrendingUp size={20} className="text-emerald-600" />}
               trend={{ value: '+18%', up: true }}
               color="green"
             />
             <MetricCard
-              title="Bookings"
+              title="Bookings YTD"
               value="312"
-              subtitle="Year to date"
-              icon={<CheckCircle size={20} className="text-orange-600" />}
+              subtitle="98% fulfillment"
+              icon={<CheckCircle2 size={20} className="text-amber-600" />}
               trend={{ value: '+24', up: true }}
               color="orange"
             />
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Today's Operations */}
-            <div className="lg:col-span-2 space-y-4">
-              <div className="card rounded-2xl">
-                <div className="flex items-center justify-between mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left: Today's Operations Timeline */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
+                <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="font-black text-gray-900 text-lg">Today's Operations</h2>
-                    <p className="text-gray-400 text-sm">{todayOps.length} scheduled actions</p>
+                    <h2 className="font-black text-gray-900 text-base sm:text-lg">Today's Operations Timeline</h2>
+                    <p className="text-gray-400 text-xs">{todayOps.length} ground actions scheduled today</p>
                   </div>
                   <button
                     onClick={() => navigate('/operator/operations')}
-                    className="text-brand-red text-sm font-bold hover:underline"
+                    className="text-brand-red text-xs sm:text-sm font-bold hover:underline flex items-center gap-1"
                   >
-                    Full View →
+                    Control Center <ArrowRight size={13} />
                   </button>
                 </div>
 
                 <div className="space-y-3">
                   {todayOps.map((op, idx) => {
-                    const statusColors = ['at-risk', 'confirmed', 'confirmed', 'confirmed', 'confirmed'];
+                    const OpIcon = op.icon;
                     return (
-                      <div key={idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div className="text-center flex-shrink-0 w-12">
-                          <p className="text-brand-red font-black text-sm">{op.time}</p>
+                      <div key={idx} className="flex items-center gap-3 sm:gap-4 p-3 rounded-2xl hover:bg-gray-50 transition-colors border border-gray-100 bg-white">
+                        <div className="text-center flex-shrink-0 w-14">
+                          <p className="text-brand-red font-black text-xs sm:text-sm">{op.time}</p>
+                          <span className="text-[10px] text-gray-400 font-medium">IST</span>
                         </div>
-                        <div className="w-px h-10 bg-gray-100 flex-shrink-0"></div>
+                        
+                        <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-700 flex-shrink-0">
+                          <OpIcon size={16} />
+                        </div>
+                        
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 text-sm">{op.action}</p>
-                          <p className="text-gray-400 text-xs">{op.location} · {op.travelers} travelers</p>
+                          <p className="font-bold text-gray-900 text-xs sm:text-sm truncate">{op.action}</p>
+                          <p className="text-gray-400 text-[11px] truncate">{op.location} • {op.travelers} pax</p>
                         </div>
+
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-xs text-gray-400 font-mono">{op.tour}</span>
-                          <StatusBadge status={statusColors[idx]} size="sm" />
+                          <span className="text-[11px] text-gray-500 font-mono hidden sm:block bg-gray-100 px-2 py-0.5 rounded-lg">{op.tour}</span>
+                          <StatusBadge status={idx === 0 ? 'at-risk' : 'confirmed'} size="sm" />
                         </div>
                       </div>
                     );
@@ -165,38 +207,41 @@ const OperatorDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* At Risk Tours */}
-              <div className="card rounded-2xl">
+              {/* At Risk Group Cards */}
+              <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
                 <div className="flex items-center gap-2 mb-4">
                   <AlertTriangle size={18} className="text-brand-red" />
-                  <h2 className="font-black text-gray-900 text-lg">Attention Required</h2>
+                  <h2 className="font-black text-gray-900 text-base sm:text-lg">Attention Required</h2>
                 </div>
 
                 {atRiskTours.map(tour => (
-                  <div key={tour.id} className="bg-red-50 border border-red-100 rounded-2xl p-4 mb-3 last:mb-0">
-                    <div className="flex items-start justify-between gap-3 mb-3">
+                  <div key={tour.id} className="bg-red-50/70 border border-red-200 rounded-2xl p-4 sm:p-5 mb-3 last:mb-0">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <StatusBadge status="at-risk" size="sm" />
-                          <span className="text-xs font-mono text-gray-500">{tour.id}</span>
+                          <span className="text-xs font-mono font-bold text-gray-700 bg-white px-2 py-0.5 rounded-md">{tour.id}</span>
                         </div>
-                        <h3 className="font-bold text-gray-900">{tour.title}</h3>
-                        <p className="text-xs text-red-600 mt-1">⚠️ {tour.alert}</p>
+                        <h3 className="font-black text-gray-900 text-sm sm:text-base">{tour.title}</h3>
+                        <p className="text-xs text-red-700 font-medium mt-1">⚠️ {tour.alert}</p>
                       </div>
-                      <div className="text-right text-xs text-gray-500">
-                        <p>{tour.travelers} travelers</p>
-                        <p className="font-bold text-gray-800">₹{(tour.value / 1000).toFixed(0)}K</p>
+                      <div className="text-left sm:text-right text-xs text-gray-500">
+                        <p>{tour.travelers} travelers • {tour.coordinator}</p>
+                        <p className="font-black text-gray-900 text-sm mt-0.5">₹{(tour.value / 1000).toFixed(0)}K Total</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => navigate('/operator/operations')}
-                        className="flex-1 bg-brand-red text-white py-2 rounded-xl text-xs font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
+                        className="flex-1 bg-brand-red text-white py-2 rounded-xl text-xs font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                       >
-                        <Zap size={12} /> Apply WAYVO Fix
+                        <Zap size={13} /> Resolve Automatically
                       </button>
-                      <button className="px-4 bg-white border border-gray-200 text-gray-600 py-2 rounded-xl text-xs font-semibold hover:bg-gray-50">
-                        Review
+                      <button
+                        onClick={() => navigate('/operator/tours')}
+                        className="px-4 bg-white border border-gray-200 text-gray-700 py-2 rounded-xl text-xs font-bold hover:bg-gray-50"
+                      >
+                        Details
                       </button>
                     </div>
                   </div>
@@ -204,27 +249,30 @@ const OperatorDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Panel */}
-            <div className="space-y-4">
-              {/* Active Tours Summary */}
-              <div className="card rounded-2xl">
+            {/* Right: Active Tours & Quick Stats */}
+            <div className="space-y-6">
+              {/* Active Tours Quick Summary */}
+              <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-gray-900">Active Tours</h3>
-                  <button onClick={() => navigate('/operator/tours')} className="text-brand-red text-xs font-bold">All →</button>
+                  <h3 className="font-black text-gray-900 text-sm sm:text-base">Active Tours</h3>
+                  <button onClick={() => navigate('/operator/tours')} className="text-brand-red text-xs font-bold hover:underline">All Tours →</button>
                 </div>
                 <div className="space-y-3">
                   {operatorTours.map(tour => (
-                    <div key={tour.id} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-xl transition-colors"
-                      onClick={() => navigate('/operator/tours')}>
+                    <div
+                      key={tour.id}
+                      className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2.5 rounded-2xl transition-colors border border-gray-100"
+                      onClick={() => navigate('/operator/tours')}
+                    >
                       <img
                         src={tour.image}
                         alt={tour.destination}
-                        className="w-10 h-10 rounded-xl object-cover flex-shrink-0"
+                        className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
                         onError={(e) => { (e.target as HTMLImageElement).style.background = '#e2e8f0'; (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm truncate">{tour.title}</p>
-                        <p className="text-xs text-gray-400">{tour.travelers} travelers · {tour.startDate}</p>
+                        <p className="font-bold text-gray-900 text-xs sm:text-sm truncate">{tour.title}</p>
+                        <p className="text-[11px] text-gray-400">{tour.travelers} pax • {tour.startDate}</p>
                       </div>
                       <StatusBadge status={tour.status} size="sm" />
                     </div>
@@ -232,24 +280,29 @@ const OperatorDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Stats */}
-              <div className="card rounded-2xl">
-                <h3 className="font-bold text-gray-900 mb-4">This Month</h3>
+              {/* Monthly Overview Card with Lucide Icons */}
+              <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
+                <h3 className="font-black text-gray-900 text-sm sm:text-base mb-4">Monthly Performance</h3>
                 <div className="space-y-3">
                   {[
-                    { label: 'New Bookings', value: '28', icon: '📅' },
-                    { label: 'Completed Tours', value: '12', icon: '✅' },
-                    { label: 'Avg. Trip Value', value: '₹59K', icon: '💰' },
-                    { label: 'Satisfaction', value: '4.8/5', icon: '⭐' },
-                  ].map(s => (
-                    <div key={s.label} className="flex items-center gap-3">
-                      <span className="text-lg">{s.icon}</span>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-600">{s.label}</p>
+                    { label: 'New Bookings', value: '28', icon: Calendar, color: 'text-blue-600 bg-blue-50' },
+                    { label: 'Completed Tours', value: '12', icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-50' },
+                    { label: 'Avg. Trip Value', value: '₹59K', icon: TrendingUp, color: 'text-purple-600 bg-purple-50' },
+                    { label: 'Traveler Rating', value: '4.8/5', icon: ShieldCheck, color: 'text-brand-red bg-red-50' },
+                  ].map(s => {
+                    const SIcon = s.icon;
+                    return (
+                      <div key={s.label} className="flex items-center gap-3 p-2 rounded-xl">
+                        <div className={`w-8 h-8 rounded-xl ${s.color} flex items-center justify-center flex-shrink-0`}>
+                          <SIcon size={15} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs text-gray-500 font-medium">{s.label}</p>
+                        </div>
+                        <p className="font-black text-gray-900 text-sm">{s.value}</p>
                       </div>
-                      <p className="font-bold text-gray-900">{s.value}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -257,18 +310,20 @@ const OperatorDashboard: React.FC = () => {
         </main>
       </div>
 
-      {/* AI Chat Button */}
+      {/* Floating AI Operator Assistant Button */}
       {!showAI && (
         <button
           onClick={() => setShowAI(true)}
           className="fixed bottom-6 right-6 bg-brand-red text-white px-5 py-3.5 rounded-full shadow-red-lg font-bold text-sm flex items-center gap-2 hover:bg-red-700 transition-all hover:scale-105 z-40"
         >
           <Bot size={18} />
-          WAYVO AI
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span>WAYVO AI</span>
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         </button>
       )}
+
       {showAI && <AIChat onClose={() => setShowAI(false)} variant="operator" />}
+      {showNotif && <NotificationPanel onClose={() => setShowNotif(false)} />}
     </div>
   );
 };

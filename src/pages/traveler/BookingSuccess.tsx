@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, Download, Eye, Share2, ArrowRight } from 'lucide-react';
+import {
+  CheckCircle2, Download, Eye, Share2, Mail, Smartphone,
+  PackageCheck, Bot, Sparkles, ShieldCheck, ArrowRight
+} from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import BottomNav from '../../components/BottomNav';
 
@@ -8,73 +11,81 @@ const BookingSuccess: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+    <div className="min-h-screen bg-gray-50 pb-24 md:pb-12">
       <Navbar variant="traveler" />
 
-      <div className="max-w-lg mx-auto px-4 pt-20 pb-8 text-center">
-        {/* Success Animation */}
-        <div className="mt-8 mb-6 relative">
-          <div className="w-28 h-28 bg-green-50 rounded-full mx-auto flex items-center justify-center animate-bounce-subtle">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle size={40} className="text-green-500" />
+      <div className="max-w-xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-8 text-center">
+        {/* Animated Celebration Icon */}
+        <div className="mt-4 sm:mt-6 mb-6 relative inline-block">
+          <div className="w-24 sm:w-28 h-24 sm:h-28 bg-emerald-50 rounded-full mx-auto flex items-center justify-center animate-bounce-subtle border border-emerald-100 shadow-md">
+            <div className="w-16 sm:w-20 h-16 sm:h-20 bg-emerald-500 rounded-full flex items-center justify-center shadow-xs">
+              <CheckCircle2 size={36} className="text-white" />
             </div>
           </div>
-          <div className="absolute top-2 right-20 text-2xl animate-float" style={{ animationDelay: '0.2s' }}>🎉</div>
-          <div className="absolute top-0 left-20 text-xl animate-float" style={{ animationDelay: '0.5s' }}>✨</div>
-          <div className="absolute bottom-2 right-16 text-xl animate-float" style={{ animationDelay: '0.8s' }}>🌟</div>
         </div>
 
-        <h1 className="text-3xl font-black text-gray-900 mb-2">Your journey is confirmed!</h1>
-        <p className="text-gray-500 mb-8">Booking confirmation sent to alison.pinto@email.com</p>
+        <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-emerald-200">
+          <ShieldCheck size={14} className="text-emerald-600" />
+          <span>Payment Verified & Confirmed</span>
+        </div>
 
-        {/* Booking Details */}
-        <div className="card rounded-2xl mb-6 text-left">
+        <h1 className="text-2xl sm:text-4xl font-black text-gray-900 mb-2 tracking-tight">Your journey is booked!</h1>
+        <p className="text-gray-500 text-xs sm:text-sm mb-8">Official confirmation voucher sent to <span className="font-semibold text-gray-700">alison.pinto@email.com</span></p>
+
+        {/* Booking Details Card */}
+        <div className="card rounded-3xl p-6 text-left mb-6 border border-gray-100 shadow-card">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-brand-red rounded-2xl flex items-center justify-center">
-              <span className="text-white font-black">W</span>
+            <div className="w-11 h-11 bg-brand-red rounded-2xl flex items-center justify-center shadow-xs">
+              <span className="text-white font-black text-lg">W</span>
             </div>
             <div>
-              <p className="text-xs text-gray-400">Booking Reference</p>
-              <p className="font-black text-gray-900 text-lg">WV-2024-1201</p>
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Booking ID</p>
+              <p className="font-black text-gray-900 text-base sm:text-lg font-mono">WV-2024-1201</p>
             </div>
             <div className="ml-auto">
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Confirmed</span>
+              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-black">
+                Confirmed ✓
+              </span>
             </div>
           </div>
 
-          <div className="space-y-3 py-4 border-t border-gray-100">
+          <div className="space-y-2.5 py-4 border-t border-gray-100 text-xs sm:text-sm">
             {[
-              { label: 'Trip', value: 'Kashmir Escape' },
-              { label: 'Dates', value: 'Oct 12 – Oct 19, 2024' },
+              { label: 'Trip Package', value: 'Kashmir Escape (7 Days)' },
+              { label: 'Travel Dates', value: 'Oct 12 – Oct 19, 2024' },
               { label: 'Travelers', value: '4 Adults' },
-              { label: 'Hotel', value: 'The Lalit Grand Palace' },
-              { label: 'Transport', value: 'IndiGo 6E204 + Cab' },
-              { label: 'Amount Paid', value: '₹1,87,200' },
-              { label: 'Payment', value: 'UPI — Confirmed ✓' },
+              { label: 'Hotel Reserved', value: 'The Lalit Grand Palace (4 Rooms)' },
+              { label: 'Flight Transfer', value: 'IndiGo 6E204 + Private Chauffeur' },
+              { label: 'Amount Paid', value: '₹1,87,200 (100% Settled via UPI)' },
             ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between text-sm">
-                <span className="text-gray-400">{label}</span>
-                <span className="font-semibold text-gray-800">{value}</span>
+              <div key={label} className="flex justify-between py-1 border-b border-gray-50 last:border-0">
+                <span className="text-gray-400 font-medium">{label}</span>
+                <span className="font-bold text-gray-800 text-right">{value}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* What's Next */}
-        <div className="bg-blue-50 rounded-2xl p-5 mb-6 text-left">
-          <h3 className="font-bold text-gray-900 mb-3">What happens next?</h3>
-          <div className="space-y-3">
+        {/* What Happens Next Card with Lucide Icons */}
+        <div className="bg-blue-50/70 border border-blue-100 rounded-3xl p-5 sm:p-6 mb-6 text-left shadow-xs">
+          <h3 className="font-black text-blue-950 text-sm mb-3 uppercase tracking-wider">What Happens Next?</h3>
+          <div className="space-y-2.5 text-xs sm:text-sm text-blue-900">
             {[
-              { icon: '📧', text: 'Booking confirmation sent to your email' },
-              { icon: '📱', text: 'Download WAYVO app to track your trip' },
-              { icon: '✅', text: 'Complete trip preparation checklist' },
-              { icon: '🤖', text: 'AI assistant available from day 1' },
-            ].map(item => (
-              <div key={item.text} className="flex items-center gap-3 text-sm text-gray-700">
-                <span>{item.icon}</span>
-                <span>{item.text}</span>
-              </div>
-            ))}
+              { icon: Mail, text: 'Vouchers & flight tickets delivered to your inbox' },
+              { icon: Smartphone, text: 'Real-time telemetry activates 24h prior to departure' },
+              { icon: PackageCheck, text: 'Complete the pre-trip preparation packing checklist' },
+              { icon: Bot, text: 'AI Travel Assistant available 24/7 during your journey' },
+            ].map((item, idx) => {
+              const ItemIcon = item.icon;
+              return (
+                <div key={idx} className="flex items-center gap-3 font-medium">
+                  <div className="w-7 h-7 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0">
+                    <ItemIcon size={14} />
+                  </div>
+                  <span>{item.text}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -82,23 +93,26 @@ const BookingSuccess: React.FC = () => {
         <div className="space-y-3">
           <button
             onClick={() => navigate('/traveler/trips/WV201')}
-            className="w-full bg-brand-red text-white py-4 rounded-xl font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-red text-sm sm:text-base"
           >
-            <Eye size={18} /> View My Trip
+            <Eye size={18} /> View Live Trip Details
           </button>
+          
           <div className="grid grid-cols-2 gap-3">
-            <button className="bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-              <Download size={16} /> Download
+            <button className="bg-white border border-gray-200 text-gray-700 py-3 rounded-2xl font-bold text-xs sm:text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 shadow-xs">
+              <Download size={15} /> Download PDF
             </button>
-            <button className="bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-              <Share2 size={16} /> Share
+            <button className="bg-white border border-gray-200 text-gray-700 py-3 rounded-2xl font-bold text-xs sm:text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 shadow-xs">
+              <Share2 size={15} /> Share Trip
             </button>
           </div>
+          
           <button
             onClick={() => navigate('/traveler/prepare/WV201')}
-            className="w-full text-brand-red font-semibold text-sm py-2 hover:underline"
+            className="w-full text-brand-red font-bold text-xs sm:text-sm py-2 hover:underline flex items-center justify-center gap-1.5"
           >
-            Start Trip Preparation →
+            <span>Start Pre-Trip Preparation</span>
+            <ArrowRight size={14} />
           </button>
         </div>
       </div>

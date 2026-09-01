@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Star, ArrowRight, X, SlidersHorizontal } from 'lucide-react';
+import { Search, Filter, Star, ArrowRight, X, SlidersHorizontal, Globe } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import BottomNav from '../../components/BottomNav';
 import DestinationCard from '../../components/DestinationCard';
@@ -152,10 +152,12 @@ const Discover: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <div className="text-5xl mb-4">🌍</div>
+          <div className="text-center py-20 flex flex-col items-center">
+            <div className="w-16 h-16 rounded-2xl bg-brand-red/10 border border-brand-red/20 flex items-center justify-center text-brand-red mb-4 shadow-sm">
+              <Globe size={32} />
+            </div>
             <h3 className="font-bold text-gray-900 text-lg mb-2">No destinations found</h3>
-            <p className="text-gray-500 text-sm mb-4">Try adjusting your search or filters</p>
+            <p className="text-gray-500 text-sm mb-4 max-w-sm">Try adjusting your search or filters to discover new places</p>
             <button
               onClick={() => { setSearch(''); setCategory('All'); setBudget('Any Budget'); }}
               className="btn-primary"

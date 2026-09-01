@@ -4,7 +4,8 @@ import {
   ArrowLeft, Sparkles, MapPin, Calendar, Users, Plus, Minus,
   Hotel, Truck, Utensils, Camera, AlertTriangle, CheckCircle,
   ChevronDown, ChevronUp, Edit2, Zap, X, Plane, Car, Waves,
-  ShieldCheck, CheckCircle2, Sliders, ArrowRight
+  ShieldCheck, CheckCircle2, Sliders, ArrowRight, ShoppingBag,
+  Mountain, Compass, Footprints, Anchor
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import BottomNav from '../../components/BottomNav';
@@ -24,19 +25,18 @@ interface Activity {
   alertMessage?: string;
 }
 
-const getActivityCategoryIcon = (category: string) => {
-  switch (category?.toLowerCase()) {
-    case 'transport':
-      return Car;
-    case 'hotel':
-      return Hotel;
-    case 'food':
-      return Utensils;
-    case 'shopping':
-      return Sliders;
-    default:
-      return Camera;
-  }
+const getActivityCategoryIcon = (category: string, iconKey?: string) => {
+  const key = (iconKey || category || '').toLowerCase();
+  if (key.includes('plane') || key.includes('flight')) return Plane;
+  if (key.includes('car') || key.includes('drive') || key.includes('transport')) return Car;
+  if (key.includes('hotel') || key.includes('stay') || key.includes('resort')) return Hotel;
+  if (key.includes('food') || key.includes('lunch') || key.includes('dinner') || key.includes('dining')) return Utensils;
+  if (key.includes('shopping') || key.includes('market')) return ShoppingBag;
+  if (key.includes('mountain') || key.includes('snow')) return Mountain;
+  if (key.includes('hiking') || key.includes('trek')) return Footprints;
+  if (key.includes('boat') || key.includes('shikara') || key.includes('lake')) return Anchor;
+  if (key.includes('cable-car') || key.includes('gondola')) return Compass;
+  return Camera;
 };
 
 const AlternativeModal: React.FC<{
@@ -269,7 +269,7 @@ const Itinerary: React.FC = () => {
                   <div className="border-t border-gray-100 px-4 sm:px-6 py-2">
                     {dayData.activities.map((activity: Activity) => {
                       const hasAlert = activity.alert && !appliedAlternative;
-                      const CatIcon = getActivityCategoryIcon(activity.category);
+                      const CatIcon = getActivityCategoryIcon(activity.category, activity.icon);
                       return (
                         <div key={activity.id} className={`flex gap-3 sm:gap-4 py-4 border-b border-gray-100 last:border-0 group ${hasAlert ? 'bg-red-50/70 p-3 sm:p-4 rounded-2xl my-2 border border-red-200' : ''}`}>
                           <div className="flex flex-col items-center">
@@ -327,7 +327,10 @@ const Itinerary: React.FC = () => {
 
                             {hasAlert && (
                               <div className="mt-3 bg-red-100/60 rounded-xl p-3 border border-red-200">
-                                <p className="text-xs text-red-700 font-medium">⚠️ {activity.alertMessage}</p>
+                                <p className="text-xs text-red-700 font-medium flex items-center gap-1.5">
+                                  <AlertTriangle size={13} className="flex-shrink-0 text-brand-red" />
+                                  <span>{activity.alertMessage}</span>
+                                </p>
                                 <button
                                   onClick={() => setShowAlternativeModal(true)}
                                   className="mt-2 text-xs text-brand-red font-bold hover:underline flex items-center gap-1.5"

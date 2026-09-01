@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit2, Bell, Lock, CreditCard, User, Heart } from 'lucide-react';
+import { ArrowLeft, Edit2, Bell, Lock, CreditCard, User, Heart, Smartphone, ShieldCheck } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import BottomNav from '../../components/BottomNav';
 
@@ -38,20 +38,24 @@ const TravelerProfile: React.FC = () => {
         {/* Tabs */}
         <div className="flex bg-white rounded-2xl p-1.5 shadow-card mb-6 gap-1">
           {[
-            { key: 'profile', label: '👤 Profile' },
-            { key: 'preferences', label: '❤️ Preferences' },
-            { key: 'security', label: '🔒 Security' },
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === tab.key ? 'bg-brand-red text-white shadow-red' : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+            { key: 'profile', label: 'Profile', icon: User },
+            { key: 'preferences', label: 'Preferences', icon: Heart },
+            { key: 'security', label: 'Security', icon: ShieldCheck },
+          ].map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as any)}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+                  activeTab === tab.key ? 'bg-brand-red text-white shadow-red' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Icon size={15} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Profile Tab */}
@@ -81,20 +85,25 @@ const TravelerProfile: React.FC = () => {
               <h3 className="font-bold text-gray-900 mb-3">Payment Methods</h3>
               <div className="space-y-3">
                 {[
-                  { type: 'UPI', detail: 'alison@oksbi', icon: '📱' },
-                  { type: 'Visa', detail: '•••• •••• •••• 4242', icon: '💳' },
-                ].map(pm => (
-                  <div key={pm.type} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{pm.icon}</span>
-                      <div>
-                        <p className="font-semibold text-gray-900 text-sm">{pm.type}</p>
-                        <p className="text-gray-400 text-xs">{pm.detail}</p>
+                  { type: 'UPI', detail: 'alison@oksbi', icon: Smartphone },
+                  { type: 'Visa', detail: '•••• •••• •••• 4242', icon: CreditCard },
+                ].map(pm => {
+                  const PmIcon = pm.icon;
+                  return (
+                    <div key={pm.type} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-brand-red">
+                          <PmIcon size={18} />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 text-sm">{pm.type}</p>
+                          <p className="text-gray-400 text-xs">{pm.detail}</p>
+                        </div>
                       </div>
+                      <button className="text-brand-red text-xs font-bold hover:underline">Remove</button>
                     </div>
-                    <button className="text-brand-red text-xs font-bold hover:underline">Remove</button>
-                  </div>
-                ))}
+                  );
+                })}
                 <button className="w-full text-brand-red text-sm font-bold py-2 hover:underline">+ Add Payment Method</button>
               </div>
             </div>

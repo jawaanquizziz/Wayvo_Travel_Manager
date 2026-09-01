@@ -60,20 +60,24 @@ const TripDetails: React.FC = () => {
         {/* Tabs */}
         <div className="flex bg-white rounded-2xl p-1.5 shadow-card mb-6 gap-1">
           {[
-            { key: 'itinerary', label: '📅 Itinerary' },
-            { key: 'chat', label: '🤖 AI Assistant' },
-            { key: 'docs', label: '📄 Documents' },
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === tab.key ? 'bg-brand-red text-white shadow-red' : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+            { key: 'itinerary', label: 'Itinerary', icon: Calendar },
+            { key: 'chat', label: 'AI Assistant', icon: Bot },
+            { key: 'docs', label: 'Documents', icon: Sparkles },
+          ].map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as any)}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+                  activeTab === tab.key ? 'bg-brand-red text-white shadow-red' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Icon size={15} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Itinerary Tab */}

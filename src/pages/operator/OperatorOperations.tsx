@@ -204,6 +204,122 @@ const OperatorOperations: React.FC = () => {
             )}
           </div>
 
+          {/* Tour Timeline + Traveler Notification */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* Tour Timeline */}
+            <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="font-black text-gray-900 text-sm sm:text-base">Trip Timeline — Kashmir Escape</h2>
+                  <p className="text-gray-400 text-[10px]">12 Oct – 19 Oct · 4 Travelers</p>
+                </div>
+                <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${flightFixApplied ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                  {flightFixApplied ? '✓ All Clear' : '⚠ 3 At Risk'}
+                </span>
+              </div>
+
+              <div className="space-y-0">
+                {[
+                  { label: 'Flight IndiGo 6E204', time: flightFixApplied ? '12:00 PM (Delayed)' : '10:00 AM', status: flightFixApplied ? 'updated' : 'at-risk', icon: Plane },
+                  { label: 'Airport Transfer', time: flightFixApplied ? '2:30 PM' : '12:30 PM', status: flightFixApplied ? 'updated' : 'at-risk', icon: ArrowRight },
+                  { label: 'Hotel Check-in', time: flightFixApplied ? '4:00 PM' : '2:00 PM', status: flightFixApplied ? 'updated' : 'at-risk', icon: Hotel },
+                  { label: 'Dal Lake Activity', time: flightFixApplied ? '5:30 PM' : '4:00 PM', status: flightFixApplied ? 'confirmed' : 'pending', icon: Camera },
+                  { label: 'Kashmiri Dinner', time: flightFixApplied ? '8:30 PM' : '7:30 PM', status: flightFixApplied ? 'confirmed' : 'confirmed', icon: Utensils },
+                  { label: 'Day 2 Transfer', time: '9:00 AM', status: 'confirmed', icon: ArrowRight },
+                  { label: 'Return Flight', time: '1:00 PM', status: 'confirmed', icon: Plane },
+                ].map((item, idx, arr) => {
+                  const Icon = item.icon;
+                  const statusColor = item.status === 'confirmed' ? 'bg-emerald-500' : item.status === 'updated' ? 'bg-blue-500' : item.status === 'at-risk' ? 'bg-red-500' : 'bg-gray-400';
+                  const statusBorder = item.status === 'at-risk' ? 'border-red-200 bg-red-50/30' : item.status === 'updated' ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100';
+
+                  return (
+                    <div key={item.label}>
+                      <div className={`flex items-center gap-3 p-2.5 rounded-xl border ${statusBorder} transition-all`}>
+                        <div className={`w-2.5 h-2.5 rounded-full ${statusColor} flex-shrink-0`} />
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${item.status === 'at-risk' ? 'bg-red-100 text-red-600' : item.status === 'updated' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                          <Icon size={12} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-gray-900 truncate">{item.label}</p>
+                        </div>
+                        <span className="text-[10px] font-semibold text-gray-500">{item.time}</span>
+                      </div>
+                      {idx < arr.length - 1 && (
+                        <div className="pl-4 py-0">
+                          <div className={`w-px h-3 ml-[3px] ${item.status === 'at-risk' ? 'bg-red-300' : 'bg-gray-200'}`} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {!flightFixApplied && (
+                <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                  <p className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                    <AlertTriangle size={12} />
+                    WAYVO detected 3 downstream impacts from Flight Delay
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Traveler Notification Preview */}
+            <div className="card rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-card">
+              <h2 className="font-black text-gray-900 text-sm sm:text-base mb-1">Traveler ↔ Operator Sync</h2>
+              <p className="text-gray-400 text-[10px] mb-4">Real-time notification to travelers</p>
+
+              {flightFixApplied ? (
+                <div className="space-y-3 animate-fade-in">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 size={14} className="text-emerald-600" />
+                      <span className="text-xs font-bold text-emerald-800">Notification Sent to All 4 Travelers</span>
+                    </div>
+                    <div className="bg-white rounded-xl p-3 border border-emerald-100">
+                      <p className="text-sm font-bold text-gray-900 mb-1">Your airport pickup has been updated.</p>
+                      <div className="flex gap-4 mt-2">
+                        <div>
+                          <p className="text-[10px] text-gray-400">New Time</p>
+                          <p className="text-sm font-black text-gray-900">2:30 PM</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-gray-400">Reason</p>
+                          <p className="text-sm font-black text-gray-900">Flight delayed</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-gray-400">Cost Impact</p>
+                          <p className="text-sm font-black text-emerald-600">₹0</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    {['Alison Pinto', 'Rohan Mehta', 'Priya Sharma', 'Arjun Kapoor'].map((name, i) => (
+                      <div key={name} className="flex items-center gap-2 bg-gray-50 rounded-xl p-2 border border-gray-100">
+                        <div className="w-6 h-6 bg-brand-red rounded-full flex items-center justify-center">
+                          <span className="text-white text-[9px] font-bold">{name.split(' ').map(n => n[0]).join('')}</span>
+                        </div>
+                        <span className="text-xs font-medium text-gray-800 flex-1">{name}</span>
+                        <CheckCircle2 size={12} className="text-emerald-500" />
+                        <span className="text-[10px] text-gray-400">Notified</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Bell size={20} className="text-gray-400" />
+                  </div>
+                  <p className="text-sm font-bold text-gray-500">No pending notifications</p>
+                  <p className="text-xs text-gray-400 mt-1">Apply the AI solution to notify travelers automatically</p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Active Tours Fleet Status */}
           <div className="card rounded-3xl p-5 sm:p-7 border border-gray-100 shadow-card">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">

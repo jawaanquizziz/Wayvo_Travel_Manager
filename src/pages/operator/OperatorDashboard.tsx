@@ -4,7 +4,7 @@ import {
   Bell, Search, MapPin, Users, TrendingUp,
   AlertTriangle, CheckCircle2, Clock, Zap, Bot,
   Menu, ShieldCheck, Car, Hotel, Camera, Utensils,
-  ArrowRight, Calendar
+  ArrowRight, Calendar, Sparkles
 } from 'lucide-react';
 import Sidebar from '../../components/Sidebar';
 import MetricCard from '../../components/MetricCard';
@@ -230,12 +230,35 @@ const OperatorDashboard: React.FC = () => {
                         <p className="font-black text-gray-900 text-sm mt-0.5">₹{(tour.value / 1000).toFixed(0)}K Total</p>
                       </div>
                     </div>
+
+                    {/* WAYVO Intelligence Details */}
+                    <div className="bg-white rounded-xl p-3 mb-3 border border-red-100">
+                      <p className="text-[10px] font-black text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <Sparkles size={10} className="text-brand-red" />
+                        WAYVO Detected
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="text-center">
+                          <p className="text-sm font-black text-gray-900">4</p>
+                          <p className="text-[10px] text-gray-500">Dependencies</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm font-black text-gray-900">2</p>
+                          <p className="text-[10px] text-gray-500">Conflicts</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm font-black text-emerald-600">₹0</p>
+                          <p className="text-[10px] text-gray-500">Est. Cost</p>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="flex gap-2">
                       <button
                         onClick={() => navigate('/operator/operations')}
                         className="flex-1 bg-brand-red text-white py-2 rounded-xl text-xs font-bold hover:bg-red-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                       >
-                        <Zap size={13} /> Resolve Automatically
+                        <Zap size={13} /> Resolve with AI
                       </button>
                       <button
                         onClick={() => navigate('/operator/tours')}

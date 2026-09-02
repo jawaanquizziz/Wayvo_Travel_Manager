@@ -14,10 +14,10 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'landing' }) => {
   const navigate = useNavigate();
 
   const travelerLinks = [
-    { label: 'Discover', path: '/traveler/discover' },
     { label: 'Plan Trip', path: '/traveler/plan' },
+    { label: 'Digital Twin', path: '/traveler/digital-twin' },
+    { label: 'Crisis Manager', path: '/traveler/crisis-manager' },
     { label: 'My Trips', path: '/traveler/trips' },
-    { label: 'AI Assistant', path: '/traveler' },
   ];
 
   const landingLinks = [

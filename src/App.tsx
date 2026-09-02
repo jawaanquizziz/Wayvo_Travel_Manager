@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { WayvoEngineProvider } from './data/wayvoEngine';
 
 // Pages
 import SplashScreen from './pages/SplashScreen';
@@ -15,6 +16,9 @@ import TripPreparation from './pages/traveler/TripPreparation';
 import Booking from './pages/traveler/Booking';
 import BookingSuccess from './pages/traveler/BookingSuccess';
 import TravelerProfile from './pages/traveler/TravelerProfile';
+import DigitalTwin from './pages/traveler/DigitalTwin';
+import CrisisManager from './pages/traveler/CrisisManager';
+import SmartReplan from './pages/traveler/SmartReplan';
 import OperatorDashboard from './pages/operator/OperatorDashboard';
 import OperatorTours from './pages/operator/OperatorTours';
 import OperatorTravelers from './pages/operator/OperatorTravelers';
@@ -49,38 +53,43 @@ function App() {
   if (showSplash) return <SplashScreen />;
 
   return (
-    <AppContext.Provider value={{ role, setRole, isLoggedIn, setIsLoggedIn }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
+    <WayvoEngineProvider>
+      <AppContext.Provider value={{ role, setRole, isLoggedIn, setIsLoggedIn }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* Traveler Routes */}
-          <Route path="/traveler" element={<TravelerDashboard />} />
-          <Route path="/traveler/discover" element={<Discover />} />
-          <Route path="/traveler/plan" element={<TripPlanner />} />
-          <Route path="/traveler/itinerary/:id" element={<Itinerary />} />
-          <Route path="/traveler/trips" element={<MyTrips />} />
-          <Route path="/traveler/trips/:id" element={<TripDetails />} />
-          <Route path="/traveler/prepare/:id" element={<TripPreparation />} />
-          <Route path="/traveler/booking" element={<Booking />} />
-          <Route path="/traveler/booking/success" element={<BookingSuccess />} />
-          <Route path="/traveler/profile" element={<TravelerProfile />} />
+            {/* Traveler Routes */}
+            <Route path="/traveler" element={<TravelerDashboard />} />
+            <Route path="/traveler/discover" element={<Discover />} />
+            <Route path="/traveler/plan" element={<TripPlanner />} />
+            <Route path="/traveler/itinerary/:id" element={<Itinerary />} />
+            <Route path="/traveler/trips" element={<MyTrips />} />
+            <Route path="/traveler/trips/:id" element={<TripDetails />} />
+            <Route path="/traveler/prepare/:id" element={<TripPreparation />} />
+            <Route path="/traveler/booking" element={<Booking />} />
+            <Route path="/traveler/booking/success" element={<BookingSuccess />} />
+            <Route path="/traveler/profile" element={<TravelerProfile />} />
+            <Route path="/traveler/digital-twin" element={<DigitalTwin />} />
+            <Route path="/traveler/crisis-manager" element={<CrisisManager />} />
+            <Route path="/traveler/replan" element={<SmartReplan />} />
 
-          {/* Operator Routes */}
-          <Route path="/operator" element={<OperatorDashboard />} />
-          <Route path="/operator/tours" element={<OperatorTours />} />
-          <Route path="/operator/travelers" element={<OperatorTravelers />} />
-          <Route path="/operator/vendors" element={<OperatorVendors />} />
-          <Route path="/operator/payments" element={<OperatorPayments />} />
-          <Route path="/operator/analytics" element={<OperatorAnalytics />} />
-          <Route path="/operator/operations" element={<OperatorOperations />} />
-          <Route path="/operator/settings" element={<OperatorSettings />} />
+            {/* Operator Routes */}
+            <Route path="/operator" element={<OperatorDashboard />} />
+            <Route path="/operator/tours" element={<OperatorTours />} />
+            <Route path="/operator/travelers" element={<OperatorTravelers />} />
+            <Route path="/operator/vendors" element={<OperatorVendors />} />
+            <Route path="/operator/payments" element={<OperatorPayments />} />
+            <Route path="/operator/analytics" element={<OperatorAnalytics />} />
+            <Route path="/operator/operations" element={<OperatorOperations />} />
+            <Route path="/operator/settings" element={<OperatorSettings />} />
 
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </BrowserRouter>
-    </AppContext.Provider>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+      </AppContext.Provider>
+    </WayvoEngineProvider>
   );
 }
 

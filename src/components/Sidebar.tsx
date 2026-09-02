@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Map, Users, Calendar, Hotel,
-  CreditCard, BarChart2, AlertCircle, Settings, ChevronLeft, Zap, X
+  CreditCard, BarChart2, AlertCircle, Settings, ChevronLeft, Zap, X, LogOut
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -114,15 +114,29 @@ const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* AI Assistant Quick Launcher */}
-        {(!collapsed || mobileOpen) && (
-          <div className="p-4 border-t border-gray-800">
+        {/* Bottom Actions */}
+        <div className="p-4 border-t border-gray-800 space-y-2">
+          {(!collapsed || mobileOpen) && (
             <button className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-red to-red-700 text-white px-4 py-3 rounded-xl font-bold text-sm hover:shadow-red transition-all">
               <Zap size={16} className="fill-white" />
               WAYVO AI Operator
             </button>
-          </div>
-        )}
+          )}
+          
+          <Link
+            to="/"
+            className={`
+              w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-gray-400 hover:bg-gray-800 hover:text-white font-medium
+              ${collapsed && !mobileOpen ? 'justify-center px-0' : ''}
+            `}
+            title="Log Out"
+          >
+            <LogOut size={20} className="flex-shrink-0" />
+            {(!collapsed || mobileOpen) && (
+              <span className="text-sm tracking-wide">Log Out</span>
+            )}
+          </Link>
+        </div>
 
         {/* Desktop Collapse Toggle */}
         <button

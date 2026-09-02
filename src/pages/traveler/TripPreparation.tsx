@@ -71,7 +71,7 @@ const TripPreparation: React.FC = () => {
           </div>
           
           <h2 className="font-black text-gray-900 text-lg sm:text-xl mb-1">
-            {pct >= 90 ? "You're all set to travel! 🎉" : pct >= 60 ? "Great progress so far! ✈️" : "Let's get organized 📋"}
+            {pct >= 90 ? "You're all set to travel!" : pct >= 60 ? "Great progress so far!" : "Let's get organized"}
           </h2>
           <p className="text-gray-500 text-xs sm:text-sm">{completed} of {total} essentials completed</p>
         </div>

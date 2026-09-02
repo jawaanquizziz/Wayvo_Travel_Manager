@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Calendar, Users, MapPin, Clock } from 'lucide-react';
+import { ArrowRight, Calendar, Users, MapPin, Clock, Plane } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import BottomNav from '../../components/BottomNav';
 import StatusBadge from '../../components/StatusBadge';
@@ -108,8 +108,10 @@ const MyTrips: React.FC = () => {
               {upcoming.map(trip => <TripCard key={trip.id} trip={trip} />)}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl p-12 text-center shadow-card">
-              <div className="text-5xl mb-4">✈️</div>
+            <div className="bg-white rounded-2xl p-12 text-center shadow-card flex flex-col items-center">
+              <div className="w-16 h-16 rounded-2xl bg-brand-red/10 border border-brand-red/20 flex items-center justify-center text-brand-red mb-4 shadow-sm">
+                <Plane size={30} />
+              </div>
               <h3 className="font-bold text-gray-900 mb-2">No upcoming trips</h3>
               <p className="text-gray-500 text-sm mb-4">Start planning your next adventure!</p>
               <button onClick={() => navigate('/traveler/plan')} className="btn-primary">

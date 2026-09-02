@@ -207,19 +207,19 @@ export const itineraryData = {
         activities: [
           {
             id: 'a1', time: '11:00', name: 'Arrive at Srinagar Airport', duration: '1h', price: 0,
-            location: 'Srinagar Airport', category: 'Transport', icon: '✈️', included: true
+            location: 'Srinagar Airport', category: 'Transport', icon: 'plane', included: true
           },
           {
             id: 'a2', time: '13:00', name: 'Check-in at The Lalit Grand Palace', duration: '1h', price: 4500,
-            location: 'Srinagar', category: 'Hotel', icon: '🏨', included: true
+            location: 'Srinagar', category: 'Hotel', icon: 'hotel', included: true
           },
           {
             id: 'a3', time: '15:00', name: 'Dal Lake Shikara Ride', duration: '2h', price: 800,
-            location: 'Dal Lake', category: 'Activity', icon: '🚣', included: true
+            location: 'Dal Lake', category: 'Activity', icon: 'boat', included: true
           },
           {
             id: 'a4', time: '18:30', name: 'Dinner at Ahdoos Restaurant', duration: '1.5h', price: 600,
-            location: 'Residency Road, Srinagar', category: 'Food', icon: '🍽️', included: true
+            location: 'Residency Road, Srinagar', category: 'Food', icon: 'food', included: true
           },
         ]
       },
@@ -230,19 +230,19 @@ export const itineraryData = {
         activities: [
           {
             id: 'b1', time: '09:00', name: 'Drive to Gulmarg', duration: '2h', price: 1200,
-            location: 'Srinagar to Gulmarg', category: 'Transport', icon: '🚗', included: true
+            location: 'Srinagar to Gulmarg', category: 'Transport', icon: 'car', included: true
           },
           {
             id: 'b2', time: '11:30', name: 'Gondola Phase 1 & 2', duration: '3h', price: 2200,
-            location: 'Gulmarg Gondola Station', category: 'Activity', icon: '🚡', included: true
+            location: 'Gulmarg Gondola Station', category: 'Activity', icon: 'cable-car', included: true
           },
           {
             id: 'b3', time: '14:30', name: 'Lunch at Highlands Park', duration: '1h', price: 700,
-            location: 'Gulmarg', category: 'Food', icon: '🍽️', included: true
+            location: 'Gulmarg', category: 'Food', icon: 'food', included: true
           },
           {
             id: 'b4', time: '16:00', name: 'Sunset Viewpoint Trek', duration: '2h', price: 500,
-            location: 'Khilanmarg', category: 'Activity', icon: '🏔️', included: true
+            location: 'Khilanmarg', category: 'Activity', icon: 'mountain', included: true
           },
         ]
       },
@@ -253,20 +253,20 @@ export const itineraryData = {
         activities: [
           {
             id: 'c1', time: '09:00', name: 'Horse Riding in Meadows', duration: '2h', price: 1500,
-            location: 'Gulmarg Meadows', category: 'Activity', icon: '🐎', included: true
+            location: 'Gulmarg Meadows', category: 'Activity', icon: 'activity', included: true
           },
           {
             id: 'c2', time: '11:30', name: 'Snow Activities (ATV/Snowmobile)', duration: '2h', price: 3000,
-            location: 'Gulmarg Snow Point', category: 'Activity', icon: '🏔️', included: true,
+            location: 'Gulmarg Snow Point', category: 'Activity', icon: 'mountain', included: true,
             alert: true, alertMessage: 'This activity is currently unavailable'
           },
           {
             id: 'c3', time: '14:00', name: 'Local Wazwan Lunch', duration: '1.5h', price: 800,
-            location: 'Gulmarg', category: 'Food', icon: '🍽️', included: true
+            location: 'Gulmarg', category: 'Food', icon: 'food', included: true
           },
           {
             id: 'c4', time: '16:00', name: 'Evening at Golf Course', duration: '2h', price: 600,
-            location: 'Gulmarg Golf Course', category: 'Activity', icon: '⛳', included: true
+            location: 'Gulmarg Golf Course', category: 'Activity', icon: 'activity', included: true
           },
         ]
       },
@@ -277,19 +277,19 @@ export const itineraryData = {
         activities: [
           {
             id: 'd1', time: '09:00', name: 'Check-out & Drive to Pahalgam', duration: '3h', price: 1800,
-            location: 'Gulmarg to Pahalgam', category: 'Transport', icon: '🚗', included: true
+            location: 'Gulmarg to Pahalgam', category: 'Transport', icon: 'car', included: true
           },
           {
             id: 'd2', time: '13:00', name: 'Check-in at Pahalgam Hotel', duration: '1h', price: 5500,
-            location: 'Pahalgam', category: 'Hotel', icon: '🏨', included: true
+            location: 'Pahalgam', category: 'Hotel', icon: 'hotel', included: true
           },
           {
             id: 'd3', time: '15:00', name: 'Betaab Valley Trek', duration: '3h', price: 800,
-            location: 'Betaab Valley', category: 'Activity', icon: '🥾', included: true
+            location: 'Betaab Valley', category: 'Activity', icon: 'hiking', included: true
           },
           {
             id: 'd4', time: '19:00', name: 'Dinner & Cultural Show', duration: '2h', price: 1000,
-            location: 'Pahalgam', category: 'Food', icon: '🎭', included: true
+            location: 'Pahalgam', category: 'Food', icon: 'food', included: true
           },
         ]
       },
@@ -300,15 +300,15 @@ export const itineraryData = {
         activities: [
           {
             id: 'e1', time: '08:00', name: 'Aru Valley Trek', duration: '4h', price: 1200,
-            location: 'Aru Valley', category: 'Activity', icon: '🥾', included: true
+            location: 'Aru Valley', category: 'Activity', icon: 'hiking', included: true
           },
           {
             id: 'e2', time: '13:00', name: 'Picnic Lunch by Lidder River', duration: '1h', price: 400,
-            location: 'Lidder River', category: 'Food', icon: '🧺', included: true
+            location: 'Lidder River', category: 'Food', icon: 'food', included: true
           },
           {
             id: 'e3', time: '15:00', name: 'Baisaran Meadow Visit', duration: '2.5h', price: 900,
-            location: 'Mini Switzerland, Pahalgam', category: 'Activity', icon: '🌄', included: true
+            location: 'Mini Switzerland, Pahalgam', category: 'Activity', icon: 'mountain', included: true
           },
         ]
       },
@@ -319,19 +319,19 @@ export const itineraryData = {
         activities: [
           {
             id: 'f1', time: '09:00', name: 'Drive back to Srinagar', duration: '2.5h', price: 1500,
-            location: 'Pahalgam to Srinagar', category: 'Transport', icon: '🚗', included: true
+            location: 'Pahalgam to Srinagar', category: 'Transport', icon: 'car', included: true
           },
           {
             id: 'f2', time: '12:00', name: 'Mughal Gardens Visit', duration: '2h', price: 200,
-            location: 'Shalimar Bagh', category: 'Activity', icon: '🌸', included: true
+            location: 'Shalimar Bagh', category: 'Activity', icon: 'activity', included: true
           },
           {
             id: 'f3', time: '15:00', name: 'Lal Chowk Shopping', duration: '2h', price: 0,
-            location: 'Lal Chowk, Srinagar', category: 'Shopping', icon: '🛍️', included: true
+            location: 'Lal Chowk, Srinagar', category: 'Shopping', icon: 'shopping', included: true
           },
           {
             id: 'f4', time: '19:00', name: 'Farewell Dinner — Houseboat', duration: '2h', price: 1200,
-            location: 'Dal Lake Houseboat', category: 'Food', icon: '🍽️', included: true
+            location: 'Dal Lake Houseboat', category: 'Food', icon: 'food', included: true
           },
         ]
       },
@@ -342,15 +342,15 @@ export const itineraryData = {
         activities: [
           {
             id: 'g1', time: '08:00', name: 'Breakfast & Check-out', duration: '1h', price: 0,
-            location: 'Hotel', category: 'Hotel', icon: '🏨', included: true
+            location: 'Hotel', category: 'Hotel', icon: 'hotel', included: true
           },
           {
             id: 'g2', time: '10:00', name: 'Transfer to Airport', duration: '1h', price: 800,
-            location: 'Srinagar', category: 'Transport', icon: '🚗', included: true
+            location: 'Srinagar', category: 'Transport', icon: 'car', included: true
           },
           {
             id: 'g3', time: '13:00', name: 'Departure Flight', duration: '2.5h', price: 0,
-            location: 'Srinagar Airport', category: 'Transport', icon: '✈️', included: true
+            location: 'Srinagar Airport', category: 'Transport', icon: 'plane', included: true
           },
         ]
       },
@@ -879,7 +879,7 @@ export const chatMessages = [
   {
     id: 'cm5',
     role: 'assistant',
-    message: '✅ Done! Day 3 has been updated to the Houseboat Relaxation Day. Your itinerary has been recalculated and your total cost is now ₹45,400 (saving ₹1,400). I\'ve also notified your coordinator Rahul Singh.',
+    message: 'Done! Day 3 has been updated to the Houseboat Relaxation Day. Your itinerary has been recalculated and your total cost is now ₹45,400 (saving ₹1,400). I\'ve also notified your coordinator Rahul Singh.',
     time: '2:32 PM',
   },
 ];

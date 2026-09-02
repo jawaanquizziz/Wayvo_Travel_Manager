@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, CheckCircle, Sparkles, MapPin, Calendar, Users,
   ChevronRight, Star, Zap, Globe, RefreshCw, Play, Bot,
   Compass, Sliders, CalendarDays, Receipt, CheckCheck,
   PackageCheck, Cpu, MessageSquareQuote, CheckCircle2,
-  TrendingUp, ShieldCheck, PhoneCall, Layers, HeartHandshake
+  TrendingUp, ShieldCheck, PhoneCall, Layers, HeartHandshake,
+  Shield, AlertTriangle, ArrowUpDown, Monitor, Eye, Brain,
+  Radio, Bell, Target, Radar, Settings, ChevronDown
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { useWayvoEngine } from '../data/wayvoEngine';
 
 const howItWorksSteps = [
   { num: '01', title: 'Discover', desc: 'Find destinations tailored to your travel style and budget.', icon: Compass, color: 'from-blue-500/20 to-blue-600/10 text-blue-600' },
@@ -50,6 +53,55 @@ const features = [
   },
 ];
 
+const uniqueFeatures = [
+  {
+    icon: Shield,
+    title: 'AI Digital Twin',
+    desc: 'Simulate your journey before you travel. Test scenarios and see impacts before they happen.',
+    color: 'from-purple-500 to-blue-600',
+    link: '/traveler/digital-twin',
+  },
+  {
+    icon: Zap,
+    title: 'AI Crisis Manager',
+    desc: 'Detect disruptions and respond automatically before they become bigger problems.',
+    color: 'from-red-500 to-orange-600',
+    link: '/traveler/crisis-manager',
+  },
+  {
+    icon: Sparkles,
+    title: 'Smart Itinerary',
+    desc: 'Build a trip around your preferences, not a fixed package. Every detail personalized.',
+    color: 'from-emerald-500 to-teal-600',
+    link: '/traveler/plan',
+  },
+  {
+    icon: ArrowUpDown,
+    title: 'Smart Replanning',
+    desc: 'Find the best alternative while balancing cost, time and preferences in seconds.',
+    color: 'from-amber-500 to-orange-600',
+    link: '/traveler/replan',
+  },
+  {
+    icon: Monitor,
+    title: 'Unified Operations',
+    desc: 'Give operators one control center for the entire journey — from booking to completion.',
+    color: 'from-blue-500 to-indigo-600',
+    link: '/operator',
+  },
+];
+
+const intelligenceLoop = [
+  { label: 'Traveler Input', icon: Users, desc: 'Preferences & requirements' },
+  { label: 'Understand', icon: Brain, desc: 'AI analyzes patterns' },
+  { label: 'Predict', icon: Eye, desc: 'Forecast disruptions' },
+  { label: 'Plan', icon: CalendarDays, desc: 'Optimize itinerary' },
+  { label: 'Monitor', icon: Radar, desc: 'Real-time tracking' },
+  { label: 'Detect', icon: AlertTriangle, desc: 'Identify issues' },
+  { label: 'Adapt', icon: RefreshCw, desc: 'Dynamic response' },
+  { label: 'Notify', icon: Bell, desc: 'Instant updates' },
+];
+
 const testimonials = [
   {
     name: 'Priya Sharma',
@@ -75,6 +127,16 @@ const testimonials = [
     trip: 'Ladakh, 10 days',
     avatar: 'SK',
   },
+];
+
+// Demo scenario steps
+const demoStepsData = [
+  { phase: '01', label: 'Detect', description: 'Flight delay detected on IndiGo 6E204', icon: Radar },
+  { phase: '02', label: 'Analyze', description: 'Mapping 4 affected dependencies', icon: Brain },
+  { phase: '03', label: 'Predict', description: 'Calculating downstream schedule impacts', icon: Eye },
+  { phase: '04', label: 'Recommend', description: 'Generating 3 optimal alternatives', icon: Target },
+  { phase: '05', label: 'Adapt', description: 'Applying best solution (₹0 extra cost)', icon: RefreshCw },
+  { phase: '06', label: 'Notify', description: 'Updating traveler & operator dashboards', icon: Bell },
 ];
 
 const TripPlannerCard = () => {
@@ -152,6 +214,152 @@ const TripPlannerCard = () => {
   );
 };
 
+// ============================================
+// Demo Mode Component
+// ============================================
+const DemoMode: React.FC = () => {
+  const [demoActive, setDemoActive] = useState(false);
+  const [currentStep, setCurrentStep] = useState(-1);
+  const [demoComplete, setDemoComplete] = useState(false);
+
+  const runDemo = useCallback(async () => {
+    setDemoActive(true);
+    setDemoComplete(false);
+    setCurrentStep(0);
+
+    for (let i = 0; i < demoStepsData.length; i++) {
+      setCurrentStep(i);
+      await new Promise(r => setTimeout(r, 2200));
+    }
+
+    await new Promise(r => setTimeout(r, 800));
+    setDemoComplete(true);
+  }, []);
+
+  const resetDemo = () => {
+    setDemoActive(false);
+    setCurrentStep(-1);
+    setDemoComplete(false);
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-gray-200 shadow-card overflow-hidden">
+      {!demoActive ? (
+        <div className="p-8 sm:p-12 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-brand-red to-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-red-lg">
+            <Play size={28} className="text-white ml-1" />
+          </div>
+          <h3 className="text-2xl font-black text-gray-900 mb-2">See WAYVO in Action</h3>
+          <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+            Watch how WAYVO detects a real-time disruption, analyzes the impact across your entire journey, and automatically adapts — in seconds.
+          </p>
+          <button
+            onClick={runDemo}
+            className="bg-brand-red text-white px-8 py-4 rounded-2xl font-bold text-base hover:bg-red-700 transition-all shadow-red active:scale-95 inline-flex items-center gap-2.5"
+          >
+            <Play size={18} className="fill-white" />
+            ▶ Run Live Scenario
+          </button>
+        </div>
+      ) : (
+        <div className="p-6 sm:p-8">
+          {/* Progress bar */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-black text-gray-900 text-base">
+                {demoComplete ? '✓ JOURNEY ADAPTED' : 'Live Scenario Running...'}
+              </h3>
+              {demoComplete && (
+                <button onClick={resetDemo} className="text-xs font-semibold text-gray-500 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors">
+                  Reset
+                </button>
+              )}
+            </div>
+            <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-brand-red to-red-500 h-full rounded-full transition-all duration-700 ease-out"
+                style={{ width: demoComplete ? '100%' : `${((currentStep + 1) / demoStepsData.length) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Steps */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {demoStepsData.map((step, idx) => {
+              const Icon = step.icon;
+              const isActive = currentStep === idx;
+              const isComplete = currentStep > idx || demoComplete;
+              const isPending = currentStep < idx && !demoComplete;
+
+              return (
+                <div
+                  key={step.phase}
+                  className={`p-4 rounded-2xl border transition-all duration-500 ${
+                    isComplete
+                      ? 'border-emerald-200 bg-emerald-50/50'
+                      : isActive
+                      ? 'border-brand-red bg-red-50/50 shadow-sm scale-[1.02]'
+                      : 'border-gray-200 bg-gray-50/50 opacity-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                      isComplete ? 'bg-emerald-500' : isActive ? 'bg-brand-red animate-pulse' : 'bg-gray-300'
+                    }`}>
+                      {isComplete ? (
+                        <CheckCircle2 size={14} className="text-white" />
+                      ) : (
+                        <Icon size={14} className="text-white" />
+                      )}
+                    </div>
+                    <span className={`text-xs font-black ${isComplete ? 'text-emerald-700' : isActive ? 'text-brand-red' : 'text-gray-400'}`}>
+                      {step.phase}
+                    </span>
+                  </div>
+                  <p className={`text-sm font-bold ${isComplete ? 'text-emerald-900' : isActive ? 'text-gray-900' : 'text-gray-400'}`}>
+                    {step.label}
+                  </p>
+                  <p className={`text-[10px] mt-0.5 ${isComplete ? 'text-emerald-600' : isActive ? 'text-gray-500' : 'text-gray-400'}`}>
+                    {step.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Completion */}
+          {demoComplete && (
+            <div className="mt-6 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-5 border border-emerald-200 text-center animate-fade-in">
+              <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <CheckCircle2 size={24} className="text-white" />
+              </div>
+              <h4 className="font-black text-emerald-900 text-lg mb-1">WAYVO successfully resolved the disruption.</h4>
+              <p className="text-emerald-700 text-sm mb-4">
+                Zero additional cost. Minimal schedule impact. All stakeholders notified.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                <button
+                  onClick={() => window.location.href = '/traveler/digital-twin'}
+                  className="bg-brand-red text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-red-700 transition-colors inline-flex items-center justify-center gap-2"
+                >
+                  <Shield size={14} /> Try Digital Twin
+                </button>
+                <button
+                  onClick={() => window.location.href = '/traveler/crisis-manager'}
+                  className="bg-gray-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors inline-flex items-center justify-center gap-2"
+                >
+                  <Zap size={14} /> Try Crisis Manager
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 const Landing: React.FC = () => {
   const navigate = useNavigate();
   const [selectedStyle, setSelectedStyle] = useState<string[]>(['Adventure', 'Cultural']);
@@ -186,15 +394,15 @@ const Landing: React.FC = () => {
             </div>
 
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.08] mb-6 tracking-tight">
-              Your trip.
+              Plan it.
               <br />
-              <span className="text-brand-red">Your choices.</span>
+              <span className="text-brand-red">Predict it.</span>
               <br />
-              One journey.
+              Adapt it.
             </h1>
 
             <p className="text-white/85 text-base sm:text-xl leading-relaxed mb-8 sm:mb-10 max-w-lg font-normal">
-              Build personalized trips, optimize budgets in real time, and adapt on the go with our intelligent traveler and operator platform.
+              WAYVO doesn't just plan your trip — it understands your journey. Personalized itineraries, predictive intelligence, and dynamic adaptation in one platform.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4">
@@ -266,36 +474,148 @@ const Landing: React.FC = () => {
         </div>
       </div>
 
-      {/* Why WAYVO */}
-      <section id="features" className="py-20 sm:py-24 bg-white">
+      {/* ============================================ */}
+      {/* WHY WAYVO IS DIFFERENT — Core Features */}
+      {/* ============================================ */}
+      <section id="features" className="py-20 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14 sm:mb-16">
+          <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-red-50 text-brand-red px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-4">
               <Zap size={15} />
-              Why WAYVO?
+              Why WAYVO Is Different
             </div>
-            <h2 className="section-title text-3xl sm:text-5xl">Travel reimagined,<br /><span className="gradient-text">from the ground up</span></h2>
-            <p className="section-subtitle max-w-2xl mx-auto text-sm sm:text-base">
-              Say goodbye to rigid package tours. WAYVO bridges real-time traveler personalization with tour operator intelligence.
+            <h2 className="text-3xl sm:text-5xl font-black text-gray-900 leading-tight mb-4">
+              WAYVO doesn't just plan your trip.
+              <br />
+              <span className="bg-gradient-to-r from-brand-red to-red-500 bg-clip-text text-transparent">
+                It understands your journey.
+              </span>
+            </h2>
+            <p className="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto">
+              Traditional platforms help you <span className="font-bold text-gray-700">book</span> a trip. WAYVO helps you <span className="font-bold text-brand-red">manage</span> the entire journey — with personalization, prediction, and dynamic adaptation.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map(({ icon: Icon, title, desc, iconBg }) => (
-              <div key={title} className="card-hover group p-7 sm:p-8 rounded-3xl border border-gray-100 bg-white">
-                <div className={`w-14 h-14 ${iconBg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-200 shadow-xs`}>
-                  <Icon size={26} />
+          {/* 5 Feature Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {uniqueFeatures.map((feature, idx) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={feature.title}
+                  onClick={() => navigate(feature.link)}
+                  className="group cursor-pointer bg-white rounded-3xl border border-gray-200 p-6 hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+                >
+                  {/* Gradient accent on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+
+                  <div className={`relative w-12 h-12 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon size={22} className="text-white" />
+                  </div>
+                  <h3 className="relative font-bold text-gray-900 text-base mb-2 group-hover:text-brand-red transition-colors">{feature.title}</h3>
+                  <p className="relative text-gray-500 text-xs leading-relaxed">{feature.desc}</p>
+                  <div className="relative mt-3 flex items-center gap-1 text-xs font-semibold text-brand-red opacity-0 group-hover:opacity-100 transition-opacity">
+                    Try it <ArrowRight size={12} />
+                  </div>
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
+      {/* ============================================ */}
+      {/* WAYVO Intelligence Loop */}
+      {/* ============================================ */}
+      <section className="py-20 sm:py-28 bg-gray-900 text-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4">
+              <Brain size={16} className="text-yellow-400" />
+              The Intelligence Behind WAYVO
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black leading-tight mb-4">
+              The WAYVO <span className="text-brand-red">Intelligence</span> Loop
+            </h2>
+            <p className="text-white/60 text-sm sm:text-base max-w-xl mx-auto">
+              A continuous cycle of understanding, prediction, and adaptation that powers every journey.
+            </p>
+          </div>
+
+          {/* Loop visualization */}
+          <div className="max-w-4xl mx-auto">
+            {/* Center piece */}
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-brand-red to-red-600 px-8 py-4 rounded-2xl shadow-red-lg">
+                <Cpu size={24} className="text-white" />
+                <div className="text-left">
+                  <p className="text-white font-black text-lg">WAYVO Intelligence Engine</p>
+                  <p className="text-white/70 text-xs font-semibold">Predict → Adapt → Deliver</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Loop nodes */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {intelligenceLoop.map((step, idx) => {
+                const Icon = step.icon;
+                return (
+                  <div
+                    key={step.label}
+                    className="group bg-white/5 border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-brand-red group-hover:shadow-red transition-all">
+                      <Icon size={18} className="text-white" />
+                    </div>
+                    <p className="text-white font-bold text-sm mb-0.5">{step.label}</p>
+                    <p className="text-white/40 text-[10px]">{step.desc}</p>
+                    {idx < intelligenceLoop.length - 1 && (
+                      <div className="hidden sm:block absolute -right-2 top-1/2 text-white/20">→</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Connecting flow text */}
+            <div className="flex items-center justify-center gap-4 mt-8">
+              {['Personalization', 'Prediction', 'Dynamic Adaptation', 'Operational Visibility'].map((label, idx) => (
+                <React.Fragment key={label}>
+                  <span className="text-white/50 text-xs font-bold uppercase tracking-wider">{label}</span>
+                  {idx < 3 && <span className="text-brand-red font-bold">+</span>}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* Live Demo Section */}
+      {/* ============================================ */}
+      <section className="py-20 sm:py-28 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-red-50 text-brand-red px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-4">
+              <Play size={15} />
+              Live Demo
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-gray-900 leading-tight mb-4">
+              Experience the <span className="bg-gradient-to-r from-brand-red to-red-500 bg-clip-text text-transparent">WAYVO difference</span>
+            </h2>
+            <p className="text-gray-500 text-sm sm:text-base max-w-lg mx-auto">
+              Watch WAYVO handle a real-time disruption from detection to resolution — automatically.
+            </p>
+          </div>
+
+          <DemoMode />
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* How It Works (Complete Lifecycle) */}
-      <section id="how-it-works" className="py-20 sm:py-24 bg-gray-50 overflow-hidden">
+      {/* ============================================ */}
+      <section id="how-it-works" className="py-20 sm:py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 bg-red-50 text-brand-red px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-4">
@@ -306,7 +626,6 @@ const Landing: React.FC = () => {
             <p className="section-subtitle text-sm sm:text-base">Every phase intelligently orchestrated for travelers and operators alike.</p>
           </div>
 
-          {/* Horizontal scroll on mobile with touch snapping, responsive grid on desktop */}
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:overflow-visible">
             {howItWorksSteps.map((step, idx) => {
               const Icon = step.icon;
@@ -333,7 +652,7 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Interactive Trip Builder Preview */}
-      <section className="py-20 sm:py-24 bg-white">
+      <section className="py-20 sm:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 items-center">
             <div>
@@ -343,7 +662,7 @@ const Landing: React.FC = () => {
               </div>
               <h2 className="section-title text-3xl sm:text-5xl mb-6">Plan your personalized<br />trip in minutes</h2>
               <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-8">
-                Select your dream destination, dates, budget, and travel interests. 
+                Select your dream destination, dates, budget, and travel interests.
                 WAYVO crafts a complete, realistic itinerary with hotel pairings, transport routes, and verified activities.
               </p>
               <ul className="space-y-4 mb-8">
@@ -370,12 +689,12 @@ const Landing: React.FC = () => {
             </div>
 
             {/* Interactive Preview Card */}
-            <div className="bg-gray-50 rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-card">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-card">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-black text-gray-900 text-lg">Quick Trip Builder</h3>
                 <span className="text-xs bg-red-50 text-brand-red px-2.5 py-1 rounded-full font-bold">Interactive</span>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Destination</label>
@@ -480,14 +799,14 @@ const Landing: React.FC = () => {
               </div>
 
               <button
-                onClick={() => navigate('/traveler/itinerary/kashmir')}
+                onClick={() => navigate('/traveler/digital-twin')}
                 className="inline-flex items-center gap-2 bg-brand-red text-white px-7 py-3.5 rounded-full font-bold hover:bg-red-600 transition-colors shadow-red"
               >
-                See Live Simulation <ArrowRight size={16} />
+                Try AI Digital Twin <ArrowRight size={16} />
               </button>
             </div>
 
-            {/* Right: AI Flow Visual with professional Lucide icons */}
+            {/* Right: AI Flow Visual */}
             <div className="space-y-3">
               {[
                 { icon: CalendarDays, label: 'Original Plan', desc: 'Day 3: Snowmobile at Gulmarg 10:00 AM', color: 'bg-white/10', border: 'border-white/20', iconColor: 'text-white' },
@@ -537,7 +856,7 @@ const Landing: React.FC = () => {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   <div className="flex-1 bg-gray-800 rounded-lg h-5 mx-2"></div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                   {[
                     { label: 'Active Tours', value: '24', icon: MapPin },
@@ -563,13 +882,13 @@ const Landing: React.FC = () => {
                     <div className="w-5 h-5 bg-brand-red rounded-full flex items-center justify-center">
                       <Zap size={12} className="text-white" />
                     </div>
-                    <span className="text-red-400 font-bold text-xs uppercase tracking-wide">Live Alert Detected</span>
+                    <span className="text-red-400 font-bold text-xs uppercase tracking-wide">Attention Required</span>
                   </div>
-                  <p className="text-white text-sm font-bold">Flight Delay — IndiGo 6E204 (+2 Hours)</p>
-                  <p className="text-gray-400 text-xs mt-0.5">4 travelers in Kashmir Group #WV204 affected.</p>
+                  <p className="text-white text-sm font-bold">🔴 Kashmir Group #WV204</p>
+                  <p className="text-gray-400 text-xs mt-0.5">Flight delayed · 4 travelers affected · 4 dependencies · ₹0 estimated cost</p>
                   <div className="flex gap-2 mt-3">
                     <button onClick={() => navigate('/operator/operations')} className="bg-brand-red text-white px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-red-700">
-                      Apply WAYVO AI Fix
+                      Resolve with AI
                     </button>
                     <button onClick={() => navigate('/operator/operations')} className="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-gray-700">
                       Review Impact
@@ -674,9 +993,14 @@ const Landing: React.FC = () => {
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full translate-x-1/2 translate-y-1/2"></div>
         </div>
         <div className="relative max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl sm:text-5xl font-black mb-6 tracking-tight">Ready to travel your way?</h2>
-          <p className="text-white/85 text-base sm:text-xl mb-10 leading-relaxed font-normal">
-            Personalized itineraries, dynamic schedule changes, and real-time operations in one unified platform.
+          <h2 className="text-3xl sm:text-5xl font-black mb-4 tracking-tight">
+            Plan it. Predict it. Adapt it.
+          </h2>
+          <p className="text-white/90 text-lg sm:text-xl mb-3 font-semibold">
+            WAYVO doesn't just plan your trip. It manages your entire journey.
+          </p>
+          <p className="text-white/70 text-sm sm:text-base mb-10 leading-relaxed max-w-lg mx-auto">
+            Personalized itineraries, predictive intelligence, dynamic adaptation, and complete operational visibility — all in one platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -687,10 +1011,11 @@ const Landing: React.FC = () => {
               Start Planning Now
             </button>
             <button
-              onClick={() => navigate('/operator')}
+              onClick={() => navigate('/traveler/digital-twin')}
               className="inline-flex items-center justify-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-full font-bold text-base hover:bg-white/20 transition-colors"
             >
-              Tour Operator Console
+              <Shield size={16} />
+              Try AI Digital Twin
             </button>
           </div>
         </div>
@@ -708,13 +1033,13 @@ const Landing: React.FC = () => {
                 <span className="font-black text-xl tracking-tight">WAYVO</span>
               </div>
               <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
-                Travel your way. Adapt as you go. Intelligent tour planning and dynamic operations.
+                Plan it. Predict it. Adapt it. Intelligent tour planning and dynamic operations.
               </p>
             </div>
             {[
-              { title: 'Travelers', links: [{ label: 'Discover', to: '/traveler/discover' }, { label: 'Plan Trip', to: '/traveler/plan' }, { label: 'My Trips', to: '/traveler/trips' }, { label: 'AI Assistant', to: '/traveler' }] },
+              { title: 'Travelers', links: [{ label: 'Plan Trip', to: '/traveler/plan' }, { label: 'Digital Twin', to: '/traveler/digital-twin' }, { label: 'Crisis Manager', to: '/traveler/crisis-manager' }, { label: 'Smart Replan', to: '/traveler/replan' }] },
               { title: 'Operators', links: [{ label: 'Dashboard', to: '/operator' }, { label: 'Tours', to: '/operator/tours' }, { label: 'Operations', to: '/operator/operations' }, { label: 'Analytics', to: '/operator/analytics' }] },
-              { title: 'Company', links: [{ label: 'About', to: '/' }, { label: 'Features', to: '/#features' }, { label: 'Lifecycle', to: '/#how-it-works' }, { label: 'Login', to: '/login' }] },
+              { title: 'Company', links: [{ label: 'Features', to: '/#features' }, { label: 'How It Works', to: '/#how-it-works' }, { label: 'For Operators', to: '/#operators' }, { label: 'Login', to: '/login' }] },
             ].map(col => (
               <div key={col.title}>
                 <h4 className="font-bold text-xs sm:text-sm mb-4 text-gray-200 tracking-wide uppercase">{col.title}</h4>

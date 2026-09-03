@@ -1056,7 +1056,7 @@ const Landing: React.FC = () => {
             ))}
           </div>
           <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-            <p className="text-gray-500 text-xs sm:text-sm">© 2024 WAYVO. Built with ❤️ for travelers everywhere.</p>
+            <p className="text-gray-500 text-xs sm:text-sm">© 2026 WAYVO. Built with ❤️ for travelers everywhere.</p>
             <p className="text-gray-500 text-xs sm:text-sm">Personalized Dynamic Tour Planning & Operations Platform</p>
           </div>
         </div>
